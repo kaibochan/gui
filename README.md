@@ -25,8 +25,8 @@ Attaching a callback function:
 Notice that callback functions always include `self` as the first parameter and the event data as the second.  
 Example event data:
 ```lua
-    event_data = {os.pullEvent("monitor_touch")}
-    e = {
+    local event_data = {os.pullEvent("monitor_touch")}
+    local e = {
         name    = event_data[1],
         display = event_data[2],
         x       = event_data[3],
