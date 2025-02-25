@@ -1,10 +1,12 @@
 -- Package initialization and loading
-local Buffer = require("/apis/gui.Buffer")
 
 local gui = {}
 gui.Element = require("/apis/gui.Element")
 gui.Display = require("/apis/gui.Display")
 gui.Text = require("/apis/gui.Text")
+gui.Bar = require("/apis/gui.Bar")
+gui.Graph = require("/apis/gui.Graph")
+gui.Utils = require("/apis/gui.Utils")
 
 local displays_attached = {}
 

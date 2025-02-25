@@ -57,9 +57,14 @@ function Display:render()
         for x = 0, self.elements[index].element.width - 1 do
             for y = 0, self.elements[index].element.height - 1 do
                 if (x + offset_x < self.window.width and y + offset_y < self.window.height) then
-                    self.window.buffer.cells[x + offset_x][y + offset_y]:copy(
-                        self.elements[index].element.buffer.cells[x][y]
-                    )
+                    if not self.elements[index].element.bg_transparent then
+                        self.window.buffer.cells[x + offset_x][y + offset_y].bg_color
+                            = self.elements[index].element.buffer.cells[x][y].bg_color
+                    end
+                    self.window.buffer.cells[x + offset_x][y + offset_y].fg_color
+                        = self.elements[index].element.buffer.cells[x][y].fg_color
+                    self.window.buffer.cells[x + offset_x][y + offset_y].character
+                        = self.elements[index].element.buffer.cells[x][y].character
                 end
             end
         end

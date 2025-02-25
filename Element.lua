@@ -8,6 +8,8 @@ local Element = {
     width = 1,
     height = 1,
     bg_color = colors.black,
+    bg_transparent = false,
+
     buffer = Buffer,
     children = {},
 }
