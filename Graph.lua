@@ -24,7 +24,6 @@ end
 
 function Graph:pullData()
     local data_file = fs.open(self.data_source, "r")
-    print(self.data_source)
     self.data = textutils.unserialise(data_file.readAll())
 end
 
