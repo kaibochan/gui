@@ -1,4 +1,6 @@
 local Element = require("/apis/gui.Element")
+local Cell = require("/apis/gui.Cell")
+local Utils = require("/apis/gui.Utils")
 
 local Graph = Element:new {
     data_source = nil,
@@ -10,11 +12,18 @@ local Graph = Element:new {
     v_min = 0,
     v_max = 1,
     draw_axes = false,
+    type = {
+        bar = "bar",
+        line = "line",
+        scatter = "scatter"
+    }
 }
 
 function Graph:new(o)
     o = o or {}
     o = Element:new(o)
+
+    o.type = o.type or Graph.type.bar
 
     setmetatable(o, self)
     self.__index = self
@@ -43,9 +52,6 @@ function Graph:updateBuffer()
 
     local function round(val)
         return math.floor(val + 0.5)
-    end
-    local function inBounds(x, y)
-        return (x >= 0 and x < self.width and y >= 0 and y < self.height)
     end
 
     local x_u0 = round(normU(0) * self.width)
@@ -80,18 +86,19 @@ function Graph:updateBuffer()
         local x_u = round(normU(point.u) * self.width)
         local y_v = round((1 - normV(point.v)) * self.height)
 
-        if inBounds(x_u, y_v) then
-            for x = x_u, (normU(point.u) * self.width) + delta_u - 0.5 do
-                local y_step = (y_v < y_v0) and 1 or -1
-                for y = y_v, y_v0, y_step do
-                    if inBounds(x, y) then
-                        self.buffer.cells[x][y].bg_color = cols[((i - 1) % #cols) + 1]
-                    end
-                end
+        if self.type == Graph.type.scatter then
+            if self.buffer:inBounds(x_u, y_v) then
+                self.buffer.cells[x_u][y_v].bg_color = colors.black
+                self.buffer.cells[x_u][y_v].character = string.sub(i, 1, 1)
             end
+        elseif self.type == Graph.type.bar then
+            local max_x = math.min((normU(point.u) * self.width) + delta_u - 0.5, self.width - 1)
+            local min_y = math.max(math.min(y_v, y_v0), 0)
+            local max_y = math.min(math.max(y_v, y_v0), self.height - 1)
+            local cell = Cell:new { bg_color = cols[((i - 1) % #cols) + 1] }
 
-            self.buffer.cells[x_u][y_v].bg_color = colors.black
-            self.buffer.cells[x_u][y_v].character = string.sub(i, 1, 1)
+            self.buffer:fillRect(x_u, min_y, max_x, max_y, cell)
+            
         end
     end
 end

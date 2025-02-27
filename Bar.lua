@@ -4,12 +4,17 @@ local Utils = require("/apis/gui.Utils")
 local Bar = Element:new {
     percent_filled = 0,
     fill_color = colors.green,
-    orientation = Utils.orientation.horizontal,
+    orientation = {
+        horizontal = "horizontal",
+        vertical = "vertical",
+    },
 }
 
 function Bar:new(o)
     o = o or {}
     o = Element:new(o)
+
+    o.orientation = o.orientation or Bar.orientation.horizontal
 
     setmetatable(o, self)
     self.__index = self
@@ -21,11 +26,11 @@ function Bar:updateBuffer()
     Element.updateBuffer(self)
 
     local getPercentage
-    if self.orientation == Utils.orientation.horizontal then
+    if self.orientation == Bar.orientation.horizontal then
         getPercentage = function (x, y)
             return (x + 1) / self.width
         end
-    elseif self.orientation == Utils.orientation.vertical then
+    elseif self.orientation == Bar.orientation.vertical then
         getPercentage = function (x, y)
             return (y + 1) / self.height
         end

@@ -17,14 +17,14 @@ local Element = {
 function Element:new(o)
     o = o or {}
 
-    setmetatable(o, self)
-    self.__index = self
-
-    o.buffer = Buffer:new {
+    o.buffer = o.buffer or Buffer:new {
         width = o.width,
         height = o.height,
     }
-    o.children = {}
+    o.children = o.children or {}
+
+    setmetatable(o, self)
+    self.__index = self
 
     return o
 end
