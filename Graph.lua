@@ -81,23 +81,27 @@ function Graph:updateBuffer()
         colors.purple,
     }
 
+    local cell = Cell:new { bg_color = self.data_color }
+
     for i, point in ipairs(self.data) do
         local x_u = round(normU(point.u) * self.width)
         local y_v = round((1 - normV(point.v)) * self.height)
 
         if self.type == Graph.type.scatter then
-            if self.buffer:inBounds(x_u, y_v) then
-                self.buffer.cells[x_u][y_v].bg_color = colors.black
-                self.buffer.cells[x_u][y_v].character = string.sub(i, 1, 1)
-            end
+            self.buffer:point(x_u, y_v, cell)
         elseif self.type == Graph.type.bar then
             local max_x = math.min((normU(point.u) * self.width) + delta_u - 0.5, self.width - 1)
             local min_y = math.max(math.min(y_v, y_v0), 0)
             local max_y = math.min(math.max(y_v, y_v0), self.height - 1)
-            local cell = Cell:new { bg_color = cols[((i - 1) % #cols) + 1] }
 
             self.buffer:fillRect(x_u, min_y, max_x, max_y, cell)
-            
+        elseif self.type == Graph.type.line then
+            if self.data[i + 1] then
+                local x_u_next = round(normU(self.data[i + 1].u) * self.width)
+                local y_v_next = round((1 - normV(self.data[i + 1].v)) * self.height)
+
+                self.buffer:line(x_u, y_v, x_u_next, y_v_next, cell) 
+            end
         end
     end
 end
