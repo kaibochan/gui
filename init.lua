@@ -6,6 +6,7 @@ gui.Display = require("/apis/gui.Display")
 gui.Text = require("/apis/gui.Text")
 gui.Bar = require("/apis/gui.Bar")
 gui.Graph = require("/apis/gui.Graph")
+gui.DataSet = require("/apis/gui.DataSet")
 gui.Utils = require("/apis/gui.Utils")
 
 local displays_attached = {}
