@@ -7,6 +7,8 @@ local DataSet = {
 function DataSet:new(o)
     o = o or {}
 
+    o.data = o.data or {}
+
     setmetatable(o, self)
     self.__index = self
 
